@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mywebapp
+  namespace: default
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  replicas: 4
+  selector:
+    matchLabels:
+      app: mywebapp
+  template:
+    metadata:
+      labels:
+        app: mywebapp
+    spec:  # Indentation added here
+      containers:
+        - name: mywebapp
+          image: charlesjatto/java-web-app:latest
+          ports:
+            - name: http
+              containerPort: 8181
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mywebapp
+  namespace: default
+spec:
+  selector:
+    app: mywebapp
+  ports:
+    - protocol: TCP
+      port: 8181
+      targetPort: http
+  type: NodePort
