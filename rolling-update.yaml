@@ -17,13 +17,20 @@ spec:
     metadata:
       labels:
         app: mywebapp
-    spec:  # Indentation added here
+    spec:
       containers:
         - name: mywebapp
           image: charlesjatto/java-web-app:latest
           ports:
             - name: http
-              containerPort: 8181
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
 
 ---
 apiVersion: v1
@@ -36,6 +43,6 @@ spec:
     app: mywebapp
   ports:
     - protocol: TCP
-      port: 8181
+      port: 8080
       targetPort: http
   type: NodePort
