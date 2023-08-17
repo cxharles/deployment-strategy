@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp
+  namespace: default
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodeapp
+  template:
+    metadata:
+      labels:
+        app: nodeapp
+    spec:
+      containers:
+        - name: nodeapp
+          image: charlesjatto/nodejs-app:1
+          resources:
+            requests:
+              memory: "100Gi"
+              cpu: "500m"
+            limits:
+              memory: "100Gi"
+              cpu: "500m"
+
